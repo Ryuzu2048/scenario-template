@@ -23,6 +23,8 @@ import waflib
 from waflib.Configure import conf
 from waflib import Utils,Logs,Errors
 
+ns3_version = "3.35"
+
 @conf
 def _check_dependencies(conf, modules, mandatory):
     # Logs.pprint ('CYAN', '  + %s' % modules)
@@ -36,10 +38,11 @@ def _check_dependencies(conf, modules, mandatory):
         modules = Utils.to_list (modules)
 
     for module in modules:
-        retval = conf.check_cfg(package = 'libns3-dev-%s-%s' % (module, libversion),
-                                args='--cflags --libs', mandatory=mandatory,
-                                msg="Checking for ns3-%s" % module,
-                                uselib_store='NS3_%s' % module.upper())
+        retval = conf.check_cfg(package = 'libns%s-%s-%s' % (ns3_version, module, libversion),
+                        args='--cflags --libs', mandatory=mandatory,
+                        msg="Checking for ns3-%s" % module,
+                        uselib_store='NS3_%s' % module.upper())
+
 
         if not retval is None:
             found.append(module)
